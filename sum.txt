@@ -1,2 +1,4 @@
 hello world
 welcome to the github journey
+something new added 
+ooh sure its good
