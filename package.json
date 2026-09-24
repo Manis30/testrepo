@@ -1,0 +1,19 @@
+{
+  "name": "gitpractice",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start":"node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Manis30/testrepo/issues"
+  },
+  "homepage": "https://github.com/Manis30/testrepo#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
