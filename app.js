@@ -47,5 +47,7 @@ app.post("/api/users", (req, res) => {
     },
   });
 });
-
+app.get("/api/check",(req,res)=>{
+   return res.status(200).send("Welcome to our deployment process")
+})
 module.exports = app;
