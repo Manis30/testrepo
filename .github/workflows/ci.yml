@@ -1,4 +1,4 @@
-name: Backend CI
+name: Backend CI/CD
 
 on:
   push:
@@ -9,8 +9,12 @@ on:
     branches:
       - main
 
+
 jobs:
 
+  # =========================
+  # CI - TEST
+  # =========================
   test:
     name: Test Backend
     runs-on: ubuntu-latest
@@ -33,6 +37,9 @@ jobs:
         run: npm test
 
 
+  # =========================
+  # CI - DOCKER BUILD
+  # =========================
   docker:
     name: Build Docker Image
     needs: test
@@ -45,3 +52,32 @@ jobs:
 
       - name: Build Docker image
         run: docker build -t backend-img .
+
+
+  # =========================
+  # CD - RAILWAY DEPLOY
+  # =========================
+  deploy:
+    name: Deploy to Railway
+    needs: docker
+    runs-on: ubuntu-latest
+
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Deploy to Railway
+        run: |
+          railway up \
+            --ci \
+            --project ${{ secrets.RAILWAY_PROJECT_ID }} \
+            --environment ${{ secrets.RAILWAY_ENVIRONMENT_ID }} \
+            --service testrepo
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
