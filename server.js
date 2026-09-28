@@ -7,6 +7,8 @@ let a=30;
 let b=40;
 let names="stash pana poroma"
 let name="Siva Saravanan hello"
+let cherry='something'
+cherry="nothing"
 mongoose.connect('mongodb://localhost:27017/myapp').then((data)=>console.log("DB is connected")).catch((err)=>console.log(err));
 app.listen(PORT, () => {
   console.log(`Server running on port  ${PORT}`);
