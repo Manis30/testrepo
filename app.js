@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import redisClient from './redisClient.js';
 const app = express();
+let name="Stashed things"
 app.use(morgan(":date :method :url :status :response-time ms :user-agent"))
 app.use(express.json());
 app.get("/api/health", async(req, res) => {
