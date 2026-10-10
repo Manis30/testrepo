@@ -21,7 +21,12 @@ app.get("/api/health", (req, res) => {
     database: connected ? "connected" : "disconnected"
   });
 });
-
+app.get("/api/saymyname",(req,res)=>{
+    res.status(200).json({
+        name:"Mani",
+        message:"Welcome home, Master"
+    })
+})
 const noteSchema = new mongoose.Schema(
   {
     title: {
