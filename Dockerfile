@@ -1,7 +1,14 @@
-from node:22-alpine
-workdir /app
-copy package*.json .
-run npm ci
-copy . .
-expose 5000
-cmd ["npm","start"]
+
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci --omit=dev
+
+COPY src/ ./src/
+
+EXPOSE 5000
+
+CMD ["npm", "start"]

@@ -1,3 +1,4 @@
+
 name: Backend CI/CD
 
 on:
@@ -9,18 +10,16 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
 
 jobs:
-
-  # =========================
-  # CI - TEST
-  # =========================
+  # CI: Install dependencies and run tests
   test:
     name: Test Backend
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -36,48 +35,32 @@ jobs:
       - name: Run tests
         run: npm test
 
-
-  # =========================
-  # CI - DOCKER BUILD
-  # =========================
+  # Build and publish the Docker image
   docker:
-    name: Build Docker Image
+    name: Build and Push Docker Image
     needs: test
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t backend-img .
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
+      - name: Login to Docker Hub
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-  # =========================
-  # CD - RAILWAY DEPLOY
-  # =========================
-  deploy:
-    name: Deploy to Railway
-    needs: docker
-    runs-on: ubuntu-latest
-
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
-    steps:
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Install Railway CLI
-        run: npm install -g @railway/cli
-
-      - name: Deploy to Railway
-        run: |
-          railway up \
-            --ci \
-            --project ${{ secrets.RAILWAY_PROJECT_ID }} \
-            --environment ${{ secrets.RAILWAY_ENVIRONMENT_ID }} \
-            --service testrepo
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          tags: |
+            manis30/sample:latest
+            manis30/sample:${{ github.sha }}
