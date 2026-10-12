@@ -12,6 +12,9 @@ app.get("/health/live", (req, res) => {
     message: "Backend is running"
   });
 });
+app.get("/check",(req,res)=>{
+ return  res.status(200).json({success:true,message:"Ci Cd pipeline done and its working properly"})
+})
 
 app.get("/api/health", (req, res) => {
   const connected = mongoose.connection.readyState === 1;
