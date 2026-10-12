@@ -70,7 +70,7 @@ jobs:
     needs: docker
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
+  
     steps:
       - name: Verify Render secret exists
         env:
