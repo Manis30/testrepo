@@ -9,7 +9,7 @@ app.use(express.json());
 app.get("/health/live", (req, res) => {
   res.status(200).json({
     status: "ok",
-    message: "Backend is running"
+    message: "Backend is running perfectly"
   });
 });
 app.get("/check",(req,res)=>{
@@ -17,7 +17,7 @@ app.get("/check",(req,res)=>{
 })
 
 app.get("/api/health", (req, res) => {
-  
+
   const connected = mongoose.connection.readyState === 1;
 
   res.status(connected ? 200 : 503).json({
