@@ -1,4 +1,24 @@
+# Dependencies are installed inside the image, never copied from your machine
 node_modules
-.github
+npm-debug.log*
+
+# Secrets and local config
 .env
-test
+.env.*
+
+# Git and editor files
+.git
+.gitignore
+.vscode
+.idea
+
+# Docker files and docs aren't needed at runtime
+Dockerfile
+.dockerignore
+docker-compose*.yml
+README.md
+*.md
+
+# Test and build output
+coverage
+dist
